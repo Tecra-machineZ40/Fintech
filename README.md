@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 db.sqlite3              Local development database
 # 🌐 Nexus Global ERP — Multi-Tenant FinTech & Transaction Analytics
 
@@ -253,3 +254,6 @@ frontend/src/app/       Login, dashboard, and payment-request screens
 manage.py               Django command-line entry point
 db.sqlite3              Local development database
 ```
+=======
+# Fintech
+>>>>>>> ecad0908193a9823eb49d4d34b7f5a6b5cbd091d
