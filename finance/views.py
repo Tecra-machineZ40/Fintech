@@ -356,10 +356,14 @@ from .models import Transaction
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
 def export_enterprise_audit(request):
+    profile = getattr(request.user, "userprofile", None)
+    if not profile or not profile.enterprise:
+        return JsonResponse({"error": "Enterprise profile required"}, status=403)
+
     gateway = request.GET.get("gateway")
-    queryset = Transaction.objects.all()
+    queryset = Transaction.objects.filter(enterprise=profile.enterprise)
     if gateway:
         queryset = queryset.filter(gateway=gateway)
+
     data = list(queryset.values("transaction_id", "amount", "currency", "gateway", "is_paid"))
     return JsonResponse({"count": len(data), "results": data})
-
