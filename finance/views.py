@@ -345,3 +345,21 @@ class CryptoInvoiceGatewayView(APIView):
             "payment_address": mock_wallet,
             "qr_code_mock": f"https://qrserver.com{mock_wallet}"
         }, status=status.HTTP_200_OK)
+
+
+from django.http import JsonResponse
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
+from .models import Transaction
+
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def export_enterprise_audit(request):
+    gateway = request.GET.get("gateway")
+    queryset = Transaction.objects.all()
+    if gateway:
+        queryset = queryset.filter(gateway=gateway)
+    data = list(queryset.values("transaction_id", "amount", "currency", "gateway", "is_paid"))
+    return JsonResponse({"count": len(data), "results": data})
+
